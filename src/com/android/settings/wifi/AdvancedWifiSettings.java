@@ -57,6 +57,7 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
     private static final String KEY_MAC_ADDRESS = "mac_address";
     private static final String KEY_CURRENT_IP_ADDRESS = "current_ip_address";
     private static final String KEY_FREQUENCY_BAND = "frequency_band";
+    private static final String KEY_COUNTRY_CODE = "country_code";
     private static final String KEY_NOTIFY_OPEN_NETWORKS = "notify_open_networks";
     private static final String KEY_SLEEP_POLICY = "sleep_policy";
     private static final String KEY_INSTALL_CREDENTIALS = "install_credentials";
@@ -185,6 +186,16 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
             }
         }
 
+        ListPreference countryPref = (ListPreference) findPreference(KEY_COUNTRY_CODE);
+        countryPref.setOnPreferenceChangeListener(this);
+        String ccValue = mWifiManager.getCountryCode();
+        if (ccValue != null) {
+            countryPref.setValue(ccValue);
+            updateCountryCodeSummary(countryPref, ccValue);
+        } else {
+            Log.e(TAG, "Failed to fetch country code");
+        }
+
         ListPreference sleepPolicyPref = (ListPreference) findPreference(KEY_SLEEP_POLICY);
         if (sleepPolicyPref != null) {
             if (Utils.isWifiOnly(context)) {
@@ -237,6 +248,13 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
         frequencyBandPref.setSummary(summaries[index]);
     }
 
+    private void updateCountryCodeSummary(Preference countryCodePref, String value) {
+        ListPreference countryCodeListPreference = (ListPreference) countryCodePref;
+        int index = countryCodeListPreference.findIndexOfValue(value);
+        String[] summaries = getResources().getStringArray(R.array.wifi_country_code_entries);
+        countryCodeListPreference.setSummary(summaries[index]);
+    }
+
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen screen, Preference preference) {
         String key = preference.getKey();
@@ -263,6 +281,16 @@ public class AdvancedWifiSettings extends SettingsPreferenceFragment
                 updateFrequencyBandSummary(preference, value);
             } catch (NumberFormatException e) {
                 Toast.makeText(context, R.string.wifi_setting_frequency_band_error,
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        } else if (KEY_COUNTRY_CODE.equals(key)) {
+            try {
+                String value = (String) newValue;
+                mWifiManager.setCountryCode(value, true);
+                updateCountryCodeSummary(preference, value);
+            } catch (NumberFormatException e) {
+                Toast.makeText(context, R.string.wifi_setting_country_code_error,
                         Toast.LENGTH_SHORT).show();
                 return false;
             }
