@@ -39,6 +39,29 @@
         <item>All</item>
     </string-array>
 
+    <!-- Display settings.  The display mode. These are shown in a list dialog. -->
+    <string-array name="screen_colortone_entries">
+        <item>Dynamic</item>
+        <item>Standard</item>
+        <item>Natural</item>
+        <item>Movie</item>
+        <item>Auto</item>
+    </string-array>
+
+    <!-- Do not translate. -->
+    <string-array name="screen_colortone_values" translatable="false">
+        <!-- Do not translate. -->
+        <item>0</item>
+        <!-- Do not translate. -->
+        <item>1</item>
+        <!-- Do not translate. -->
+        <item>2</item>
+        <!-- Do not translate. -->
+        <item>3</item>
+        <!-- Do not translate. -->
+        <item>4</item>
+    </string-array>
+
     <!-- Display settings.  The delay in inactivity before the screen is turned off. These are shown in a list dialog. -->
     <string-array name="screen_timeout_entries">
         <item>15 seconds</item>
@@ -447,6 +470,684 @@
         <item>1</item>
         <!-- Do not translate. -->
         <item>2</item>
+    </string-array>
+
+    <!-- Wi-Fi settings. Presented as a list dialog to the user to choose the Wi-Fi country code. -->
+    <string-array name="wifi_country_code_entries">
+        <item>Afghanistan</item>
+        <item>Albania (Republic of)</item>
+        <item>Angola (Republic of)</item>
+        <item>United Arab Emirates</item>
+        <item>Andorra (Principality of)</item>
+        <item>Antigua and Barbuda</item>
+        <item>Anguilla</item>
+        <item>Armenia (Republic of)</item>
+        <item>American Samoa</item>
+        <item>Argentine Republic</item>
+        <item>Australia</item>
+        <item>Austria</item>
+        <item>Aruba</item>
+        <item>Azerbaijani Republic</item>
+        <item>Bangladesh (People\'s Republic of)</item>
+        <item>Belgium</item>
+        <item>Burkina Faso</item>
+        <item>Bulgaria (Republic of)</item>
+        <item>Bosnia and Herzegovina</item>
+        <item>Barbados</item>
+        <item>Bermuda</item>
+        <item>Brunei Darussalam</item>
+        <item>Bolivia (Republic of)</item>
+        <item>Bahrain (Kingdom of)</item>
+        <item>Burundi (Republic of)</item>
+        <item>Benin (Republic of)</item>
+        <item>Bhutan (Kingdom of)</item>
+        <item>Brazil (Federative Republic of)</item>
+        <item>Bahamas (Commonwealth of the)</item>
+        <item>Belarus (Republic of)</item>
+        <item>Belize</item>
+        <item>Botswana (Republic of)</item>
+        <item>Cook Islands</item>
+        <item>Côte d\'Ivoire (Republic of)</item>
+        <item>Switzerland (Confederation of)</item>
+        <item>Colombia (Republic of)</item>
+        <item>China (People\'s Republic of)</item>
+        <item>Cameroon (Republic of)</item>
+        <item>Chile</item>
+        <item>Canada</item>
+        <item>Democratic Republic of the Congo</item>
+        <item>Central African Republic</item>
+        <item>Czech Republic</item>
+        <item>Cyprus (Republic of)</item>
+        <item>Costa Rica</item>
+        <item>Cape Verde (Republic of)</item>
+        <item>Cuba</item>
+        <item>Dominican Republic</item>
+        <item>Dominica (Commonwealth of)</item>
+        <item>Djibouti (Republic of)</item>
+        <item>Denmark</item>
+        <item>Germany (Federal Republic of)</item>
+        <item>Algeria (People\'s Democratic Republic of)</item>
+        <item>Estonia (Republic of)</item>
+        <item>Egypt (Arab Republic of)</item>
+        <item>Ecuador</item>
+        <item>Ethiopia (Federal Democratic Republic of)</item>
+        <item>Spain</item>
+        <item>Eritrea</item>
+        <item>Falkland Islands (Malvinas)</item>
+        <item>Micronesia (Federated States of)</item>
+        <item>France</item>
+        <item>Finland</item>
+        <item>Fiji (Republic of)</item>
+        <item>Faroe Islands</item>
+        <item>Guinea-Bissau (Republic of)</item>
+        <item>Guam</item>
+        <item>Guatemala (Republic of)</item>
+        <item>Greece</item>
+        <item>Equatorial Guinea (Republic of)</item>
+        <item>Guadeloupe (French Department of)</item>
+        <item>Guyana</item>
+        <item>French Guiana (French Department of)</item>
+        <item>Abkhazia (Georgia)</item>
+        <item>Grenada</item>
+        <item>United Kingdom of Great Britain and Northern Ireland</item>
+        <item>Gabonese Republic</item>
+        <item>Guinea (Republic of)</item>
+        <item>Gambia (Republic of the)</item>
+        <item>Greenland (Denmark)</item>
+        <item>Gibraltar</item>
+        <item>Ghana</item>
+        <item>Croatia (Republic of)</item>
+        <item>Haiti (Republic of)</item>
+        <item>Hong Kong, China</item>
+        <item>Honduras (Republic of)</item>
+        <item>Hungary (Republic of)</item>
+        <item>Iraq (Republic of)</item>
+        <item>Israel (State of)</item>
+        <item>Iceland</item>
+        <item>Iran (Islamic Republic of)</item>
+        <item>Italy</item>
+        <item>India (Republic of)</item>
+        <item>Ireland</item>
+        <item>Indonesia (Republic of)</item>
+        <item>Japan</item>
+        <item>Jamaica</item>
+        <item>Jordan (Hashemite Kingdom of)</item>
+        <item>Kyrgyz Republic</item>
+        <item>Kenya (Republic of)</item>
+        <item>Kiribati (Republic of)</item>
+        <item>Cambodia (Kingdom of)</item>
+        <item>Saint Kitts and Nevis</item>
+        <item>Comoros (Union of the)</item>
+        <item>Korea (Republic of)</item>
+        <item>Democratic People\'s Republic of Korea</item>
+        <item>Kuwait (State of)</item>
+        <item>Kazakhstan (Republic of)</item>
+        <item>Cayman Islands</item>
+        <item>Lebanon</item>
+        <item>Saint Lucia</item>
+        <item>Lao People\'s Democratic Republic</item>
+        <item>Sri Lanka (Democratic Socialist Republic of)</item>
+        <item>Liechtenstein (Principality of)</item>
+        <item>Latvia (Republic of)</item>
+        <item>Lithuania (Republic of)</item>
+        <item>Luxembourg</item>
+        <item>Lesotho (Kingdom of)</item>
+        <item>Libya (Socialist People\'s Libyan Arab Jamahiriya)</item>
+        <item>Liberia (Republic of)</item>
+        <item>The Former Yugoslav Republic of Macedonia</item>
+        <item>Malaysia</item>
+        <item>Mozambique (Republic of)</item>
+        <item>Montenegro (Republic of)</item>
+        <item>Moldova (Republic of)</item>
+        <item>Madagascar (Republic of)</item>
+        <item>Morocco (Kingdom of)</item>
+        <item>Monaco (Principality of)</item>
+        <item>Myanmar (Union of)</item>
+        <item>Mali (Republic of)</item>
+        <item>Macao, China</item>
+        <item>Mongolia</item>
+        <item>Marshall Islands (Republic of the)</item>
+        <item>Mauritius (Republic of)</item>
+        <item>Malta</item>
+        <item>Malawi</item>
+        <item>Maldives (Republic of)</item>
+        <item>Northern Mariana Islands (Commonwealth of the)</item>
+        <item>Montserrat</item>
+        <item>Mauritania (Islamic Republic of)</item>
+        <item>Mexico</item>
+        <item>Nicaragua</item>
+        <item>Netherlands (Kingdom of the)</item>
+        <item>Norway</item>
+        <item>Namibia (Republic of)</item>
+        <item>New Caledonia (Territoire franais d\'outre-mer)</item>
+        <item>Niger (Republic of the)</item>
+        <item>Nigeria (Federal Republic of)</item>
+        <item>New Zealand</item>
+        <item>Nepal</item>
+        <item>Nauru (Republic of)</item>
+        <item>Niue</item>
+        <item>Oman (Sultanate of)</item>
+        <item>Paraguay (Republic of)</item>
+        <item>Panama (Republic of)</item>
+        <item>Puerto Rico</item>
+        <item>Palestine</item>
+        <item>Palau (Republic of)</item>
+        <item>Portugal</item>
+        <item>French Polynesia (Territoire franais d\'outre-mer)</item>
+        <item>Papua New Guinea</item>
+        <item>Peru</item>
+        <item>Pakistan (Islamic Republic of)</item>
+        <item>Philippines (Republic of the)</item>
+        <item>Poland (Republic of)</item>
+        <item>Saint Pierre and Miquelon (Collectivit territoriale de la Rpublique franaise)</item>
+        <item>Qatar (State of)</item>
+        <item>Russian Federation</item>
+        <item>Rwanda (Republic of)</item>
+        <item>Serbia and Montenegro</item>
+        <item>Reunion (French Department of)</item>
+        <item>Romania</item>
+        <item>El Salvador (Republic of)</item>
+        <item>Saint Helena, Ascension and Tristan da Cunha</item>
+        <item>Somali Democratic Republic</item>
+        <item>Solomon Islands</item>
+        <item>Saudi Arabia (Kingdom of)</item>
+        <item>Swaziland (Kingdom of)</item>
+        <item>Syrian Arab Republic</item>
+        <item>South Sudan (Republic of)</item>
+        <item>Suriname (Republic of)</item>
+        <item>Sao Tome and Principe (Democratic Republic of)</item>
+        <item>Slovak Republic</item>
+        <item>Slovenia (Republic of)</item>
+        <item>Senegal (Republic of)</item>
+        <item>San Marino (Republic of)</item>
+        <item>Sierra Leone</item>
+        <item>Seychelles (Republic of)</item>
+        <item>Singapore (Republic of)</item>
+        <item>Sweden</item>
+        <item>Sudan (Republic of the)</item>
+        <item>Tuvalu</item>
+        <item>Taiwan, China</item>
+        <item>Trinidad and Tobago</item>
+        <item>Turkey</item>
+        <item>Tonga (Kingdom of)</item>
+        <item>Tajikistan (Republic of)</item>
+        <item>Thailand</item>
+        <item>Togolese Republic</item>
+        <item>Chad (Republic of)</item>
+        <item>Turks and Caicos Islands</item>
+        <item>Tanzania (United Republic of)</item>
+        <item>Tunisia</item>
+        <item>Democratic Republic of Timor-Leste</item>
+        <item>Turkmenistan</item>
+        <item>Uruguay (Eastern Republic of)</item>
+        <item>Uzbekistan (Republic of)</item>
+        <item>United States of America</item>
+        <item>Uganda (Republic of)</item>
+        <item>Ukraine</item>
+        <item>Vanuatu (Republic of)</item>
+        <item>Venezuela (Bolivarian Republic of)</item>
+        <item>Vatican City State</item>
+        <item>Saint Vincent and the Grenadines</item>
+        <item>British Virgin Islands</item>
+        <item>United States Virgin Islands</item>
+        <item>Viet Nam (Socialist Republic of)</item>
+        <item>Wallis and Futuna (Territoire franais d\'outre-mer)</item>
+        <item>Samoa (Independent State of)</item>
+        <item>Yemen (Republic of)</item>
+        <item>Zambia (Republic of)</item>
+        <item>South Africa (Republic of)</item>
+        <item>Zimbabwe (Republic of)</item>
+    </string-array>
+
+    <!-- Match with wifi_country_code_entries and the values of the settings in WifiManager. -->
+    <!-- Do not translate. -->
+    <string-array name="wifi_country_code_values">
+        <!-- Do not translate. -->
+        <item>af</item>
+        <!-- Do not translate. -->
+        <item>al</item>
+        <!-- Do not translate. -->
+        <item>ao</item>
+        <!-- Do not translate. -->
+        <item>ae</item>
+        <!-- Do not translate. -->
+        <item>ad</item>
+        <!-- Do not translate. -->
+        <item>ag</item>
+        <!-- Do not translate. -->
+        <item>ai</item>
+        <!-- Do not translate. -->
+        <item>am</item>
+        <!-- Do not translate. -->
+        <item>as</item>
+        <!-- Do not translate. -->
+        <item>ar</item>
+        <!-- Do not translate. -->
+        <item>au</item>
+        <!-- Do not translate. -->
+        <item>at</item>
+        <!-- Do not translate. -->
+        <item>aw</item>
+        <!-- Do not translate. -->
+        <item>az</item>
+        <!-- Do not translate. -->
+        <item>bd</item>
+        <!-- Do not translate. -->
+        <item>be</item>
+        <!-- Do not translate. -->
+        <item>bf</item>
+        <!-- Do not translate. -->
+        <item>bg</item>
+        <!-- Do not translate. -->
+        <item>ba</item>
+        <!-- Do not translate. -->
+        <item>bb</item>
+        <!-- Do not translate. -->
+        <item>bm</item>
+        <!-- Do not translate. -->
+        <item>bn</item>
+        <!-- Do not translate. -->
+        <item>bo</item>
+        <!-- Do not translate. -->
+        <item>bh</item>
+        <!-- Do not translate. -->
+        <item>bi</item>
+        <!-- Do not translate. -->
+        <item>bj</item>
+        <!-- Do not translate. -->
+        <item>bt</item>
+        <!-- Do not translate. -->
+        <item>br</item>
+        <!-- Do not translate. -->
+        <item>bs</item>
+        <!-- Do not translate. -->
+        <item>by</item>
+        <!-- Do not translate. -->
+        <item>bz</item>
+        <!-- Do not translate. -->
+        <item>bw</item>
+        <!-- Do not translate. -->
+        <item>ck</item>
+        <!-- Do not translate. -->
+        <item>ci</item>
+        <!-- Do not translate. -->
+        <item>ch</item>
+        <!-- Do not translate. -->
+        <item>co</item>
+        <!-- Do not translate. -->
+        <item>cn</item>
+        <!-- Do not translate. -->
+        <item>cm</item>
+        <!-- Do not translate. -->
+        <item>cl</item>
+        <!-- Do not translate. -->
+        <item>ca</item>
+        <!-- Do not translate. -->
+        <item>cg</item>
+        <!-- Do not translate. -->
+        <item>cf</item>
+        <!-- Do not translate. -->
+        <item>cz</item>
+        <!-- Do not translate. -->
+        <item>cy</item>
+        <!-- Do not translate. -->
+        <item>cr</item>
+        <!-- Do not translate. -->
+        <item>cv</item>
+        <!-- Do not translate. -->
+        <item>cu</item>
+        <!-- Do not translate. -->
+        <item>do</item>
+        <!-- Do not translate. -->
+        <item>dm</item>
+        <!-- Do not translate. -->
+        <item>dj</item>
+        <!-- Do not translate. -->
+        <item>dk</item>
+        <!-- Do not translate. -->
+        <item>de</item>
+        <!-- Do not translate. -->
+        <item>dz</item>
+        <!-- Do not translate. -->
+        <item>ee</item>
+        <!-- Do not translate. -->
+        <item>eg</item>
+        <!-- Do not translate. -->
+        <item>ec</item>
+        <!-- Do not translate. -->
+        <item>et</item>
+        <!-- Do not translate. -->
+        <item>es</item>
+        <!-- Do not translate. -->
+        <item>er</item>
+        <!-- Do not translate. -->
+        <item>fk</item>
+        <!-- Do not translate. -->
+        <item>fm</item>
+        <!-- Do not translate. -->
+        <item>fr</item>
+        <!-- Do not translate. -->
+        <item>fi</item>
+        <!-- Do not translate. -->
+        <item>fj</item>
+        <!-- Do not translate. -->
+        <item>fo</item>
+        <!-- Do not translate. -->
+        <item>gw</item>
+        <!-- Do not translate. -->
+        <item>gu</item>
+        <!-- Do not translate. -->
+        <item>gt</item>
+        <!-- Do not translate. -->
+        <item>gr</item>
+        <!-- Do not translate. -->
+        <item>gq</item>
+        <!-- Do not translate. -->
+        <item>gp</item>
+        <!-- Do not translate. -->
+        <item>gy</item>
+        <!-- Do not translate. -->
+        <item>gf</item>
+        <!-- Do not translate. -->
+        <item>ge</item>
+        <!-- Do not translate. -->
+        <item>gd</item>
+        <!-- Do not translate. -->
+        <item>gb</item>
+        <!-- Do not translate. -->
+        <item>ga</item>
+        <!-- Do not translate. -->
+        <item>gn</item>
+        <!-- Do not translate. -->
+        <item>gm</item>
+        <!-- Do not translate. -->
+        <item>gl</item>
+        <!-- Do not translate. -->
+        <item>gi</item>
+        <!-- Do not translate. -->
+        <item>gh</item>
+        <!-- Do not translate. -->
+        <item>hr</item>
+        <!-- Do not translate. -->
+        <item>ht</item>
+        <!-- Do not translate. -->
+        <item>hk</item>
+        <!-- Do not translate. -->
+        <item>hn</item>
+        <!-- Do not translate. -->
+        <item>hu</item>
+        <!-- Do not translate. -->
+        <item>iq</item>
+        <!-- Do not translate. -->
+        <item>il</item>
+        <!-- Do not translate. -->
+        <item>is</item>
+        <!-- Do not translate. -->
+        <item>ir</item>
+        <!-- Do not translate. -->
+        <item>it</item>
+        <!-- Do not translate. -->
+        <item>in</item>
+        <!-- Do not translate. -->
+        <item>ie</item>
+        <!-- Do not translate. -->
+        <item>id</item>
+        <!-- Do not translate. -->
+        <item>jp</item>
+        <!-- Do not translate. -->
+        <item>jm</item>
+        <!-- Do not translate. -->
+        <item>jo</item>
+        <!-- Do not translate. -->
+        <item>kg</item>
+        <!-- Do not translate. -->
+        <item>ke</item>
+        <!-- Do not translate. -->
+        <item>ki</item>
+        <!-- Do not translate. -->
+        <item>kh</item>
+        <!-- Do not translate. -->
+        <item>kn</item>
+        <!-- Do not translate. -->
+        <item>km</item>
+        <!-- Do not translate. -->
+        <item>kr</item>
+        <!-- Do not translate. -->
+        <item>kp</item>
+        <!-- Do not translate. -->
+        <item>kw</item>
+        <!-- Do not translate. -->
+        <item>kz</item>
+        <!-- Do not translate. -->
+        <item>ky</item>
+        <!-- Do not translate. -->
+        <item>lb</item>
+        <!-- Do not translate. -->
+        <item>lc</item>
+        <!-- Do not translate. -->
+        <item>la</item>
+        <!-- Do not translate. -->
+        <item>lk</item>
+        <!-- Do not translate. -->
+        <item>li</item>
+        <!-- Do not translate. -->
+        <item>lv</item>
+        <!-- Do not translate. -->
+        <item>lt</item>
+        <!-- Do not translate. -->
+        <item>lu</item>
+        <!-- Do not translate. -->
+        <item>ls</item>
+        <!-- Do not translate. -->
+        <item>ly</item>
+        <!-- Do not translate. -->
+        <item>lr</item>
+        <!-- Do not translate. -->
+        <item>mk</item>
+        <!-- Do not translate. -->
+        <item>my</item>
+        <!-- Do not translate. -->
+        <item>mz</item>
+        <!-- Do not translate. -->
+        <item>me</item>
+        <!-- Do not translate. -->
+        <item>md</item>
+        <!-- Do not translate. -->
+        <item>mg</item>
+        <!-- Do not translate. -->
+        <item>ma</item>
+        <!-- Do not translate. -->
+        <item>mc</item>
+        <!-- Do not translate. -->
+        <item>mm</item>
+        <!-- Do not translate. -->
+        <item>ml</item>
+        <!-- Do not translate. -->
+        <item>mo</item>
+        <!-- Do not translate. -->
+        <item>mn</item>
+        <!-- Do not translate. -->
+        <item>mh</item>
+        <!-- Do not translate. -->
+        <item>mu</item>
+        <!-- Do not translate. -->
+        <item>mt</item>
+        <!-- Do not translate. -->
+        <item>mw</item>
+        <!-- Do not translate. -->
+        <item>mv</item>
+        <!-- Do not translate. -->
+        <item>mp</item>
+        <!-- Do not translate. -->
+        <item>ms</item>
+        <!-- Do not translate. -->
+        <item>mr</item>
+        <!-- Do not translate. -->
+        <item>mx</item>
+        <!-- Do not translate. -->
+        <item>ni</item>
+        <!-- Do not translate. -->
+        <item>nl</item>
+        <!-- Do not translate. -->
+        <item>no</item>
+        <!-- Do not translate. -->
+        <item>na</item>
+        <!-- Do not translate. -->
+        <item>nc</item>
+        <!-- Do not translate. -->
+        <item>ne</item>
+        <!-- Do not translate. -->
+        <item>ng</item>
+        <!-- Do not translate. -->
+        <item>nz</item>
+        <!-- Do not translate. -->
+        <item>np</item>
+        <!-- Do not translate. -->
+        <item>nr</item>
+        <!-- Do not translate. -->
+        <item>nu</item>
+        <!-- Do not translate. -->
+        <item>om</item>
+        <!-- Do not translate. -->
+        <item>py</item>
+        <!-- Do not translate. -->
+        <item>pa</item>
+        <!-- Do not translate. -->
+        <item>pr</item>
+        <!-- Do not translate. -->
+        <item>ps</item>
+        <!-- Do not translate. -->
+        <item>pw</item>
+        <!-- Do not translate. -->
+        <item>pt</item>
+        <!-- Do not translate. -->
+        <item>pf</item>
+        <!-- Do not translate. -->
+        <item>pg</item>
+        <!-- Do not translate. -->
+        <item>pe</item>
+        <!-- Do not translate. -->
+        <item>pk</item>
+        <!-- Do not translate. -->
+        <item>ph</item>
+        <!-- Do not translate. -->
+        <item>pl</item>
+        <!-- Do not translate. -->
+        <item>pm</item>
+        <!-- Do not translate. -->
+        <item>qa</item>
+        <!-- Do not translate. -->
+        <item>ru</item>
+        <!-- Do not translate. -->
+        <item>rw</item>
+        <!-- Do not translate. -->
+        <item>rs</item>
+        <!-- Do not translate. -->
+        <item>re</item>
+        <!-- Do not translate. -->
+        <item>ro</item>
+        <!-- Do not translate. -->
+        <item>sv</item>
+        <!-- Do not translate. -->
+        <item>sh</item>
+        <!-- Do not translate. -->
+        <item>so</item>
+        <!-- Do not translate. -->
+        <item>sb</item>
+        <!-- Do not translate. -->
+        <item>sa</item>
+        <!-- Do not translate. -->
+        <item>sz</item>
+        <!-- Do not translate. -->
+        <item>sy</item>
+        <!-- Do not translate. -->
+        <item>ss</item>
+        <!-- Do not translate. -->
+        <item>sr</item>
+        <!-- Do not translate. -->
+        <item>st</item>
+        <!-- Do not translate. -->
+        <item>sk</item>
+        <!-- Do not translate. -->
+        <item>si</item>
+        <!-- Do not translate. -->
+        <item>sn</item>
+        <!-- Do not translate. -->
+        <item>sm</item>
+        <!-- Do not translate. -->
+        <item>sl</item>
+        <!-- Do not translate. -->
+        <item>sc</item>
+        <!-- Do not translate. -->
+        <item>sg</item>
+        <!-- Do not translate. -->
+        <item>se</item>
+        <!-- Do not translate. -->
+        <item>sd</item>
+        <!-- Do not translate. -->
+        <item>tv</item>
+        <!-- Do not translate. -->
+        <item>tw</item>
+        <!-- Do not translate. -->
+        <item>tt</item>
+        <!-- Do not translate. -->
+        <item>tr</item>
+        <!-- Do not translate. -->
+        <item>to</item>
+        <!-- Do not translate. -->
+        <item>tj</item>
+        <!-- Do not translate. -->
+        <item>th</item>
+        <!-- Do not translate. -->
+        <item>tg</item>
+        <!-- Do not translate. -->
+        <item>td</item>
+        <!-- Do not translate. -->
+        <item>tc</item>
+        <!-- Do not translate. -->
+        <item>tz</item>
+        <!-- Do not translate. -->
+        <item>tn</item>
+        <!-- Do not translate. -->
+        <item>tl</item>
+        <!-- Do not translate. -->
+        <item>tm</item>
+        <!-- Do not translate. -->
+        <item>uy</item>
+        <!-- Do not translate. -->
+        <item>uz</item>
+        <!-- Do not translate. -->
+        <item>us</item>
+        <!-- Do not translate. -->
+        <item>ug</item>
+        <!-- Do not translate. -->
+        <item>ua</item>
+        <!-- Do not translate. -->
+        <item>vu</item>
+        <!-- Do not translate. -->
+        <item>ve</item>
+        <!-- Do not translate. -->
+        <item>va</item>
+        <!-- Do not translate. -->
+        <item>vc</item>
+        <!-- Do not translate. -->
+        <item>vg</item>
+        <!-- Do not translate. -->
+        <item>vi</item>
+        <!-- Do not translate. -->
+        <item>vn</item>
+        <!-- Do not translate. -->
+        <item>wf</item>
+        <!-- Do not translate. -->
+        <item>ws</item>
+        <!-- Do not translate. -->
+        <item>ye</item>
+        <!-- Do not translate. -->
+        <item>zm</item>
+        <!-- Do not translate. -->
+        <item>za</item>
+        <!-- Do not translate. -->
+        <item>zw</item>
     </string-array>
 
 
