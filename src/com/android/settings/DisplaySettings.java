@@ -280,6 +280,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static boolean isCameraDoubleTapPowerGestureAvailable(Resources res) {
         return res.getBoolean(
                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
+    }
 
     private void updateColortonePreferenceDescription(long currentColortone) {
         ListPreference preference = mScreenColortonePreference;
