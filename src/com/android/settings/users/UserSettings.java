@@ -1044,7 +1044,11 @@ public class UserSettings extends SettingsPreferenceFragment
             DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(
                     Context.DEVICE_POLICY_SERVICE);
             // No restricted profiles for tablets with a device owner, or phones.
-            if (dpm.getDeviceOwner() != null || Utils.isVoiceCapable(context)) {
+//--->
+//            if (dpm.getDeviceOwner() != null || Utils.isVoiceCapable(context)) {
+//===
+            if (dpm.getDeviceOwner() != null) {
+//+++>
                 caps.mCanAddRestrictedProfile = false;
             }
             final int myUserId = UserHandle.myUserId();
