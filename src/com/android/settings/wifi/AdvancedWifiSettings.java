@@ -140,6 +140,7 @@ public class AdvancedWifiSettings extends RestrictedSettingsFragment {
         countryPref.setOnPreferenceChangeListener(this);
         String ccValue = mWifiManager.getCountryCode();
         if (ccValue != null) {
+            ccValue = ccValue.toLowerCase();
             countryPref.setValue(ccValue);
             updateCountryCodeSummary(countryPref, ccValue);
         } else {
