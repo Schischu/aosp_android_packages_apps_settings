@@ -27,15 +27,21 @@ import static android.provider.Settings.Secure.CAMERA_GESTURE_DISABLED;
 import static android.provider.Settings.Secure.DOUBLE_TAP_TO_WAKE;
 import static android.provider.Settings.Secure.DOZE_ENABLED;
 import static android.provider.Settings.Secure.WAKE_GESTURE_ENABLED;
+
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+
 import static android.provider.Settings.System.BUTTON_LIGHT;
 import static android.provider.Settings.System.BUTTON_LIGHT_ON;
 import static android.provider.Settings.System.BUTTON_LIGHT_OFF;
+//import static android.provider.Settings.System.BUTTON_LIGHT_OFF_TIMEOUT;
+
 import static android.provider.Settings.System.SCREEN_COLORTONE;
 import static android.provider.Settings.System.SCREEN_COLORTONE_AUTO;
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
+
+import static android.provider.Settings.System.NAVBAR_ENABLED;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -88,6 +94,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_CAMERA_DOUBLE_TAP_POWER_GESTURE
             = "camera_double_tap_power_gesture";
     private static final String KEY_BUTTON_LIGHT = "button_light";
+    private static final String KEY_NAVBAR = "navbar_enabled";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -106,6 +113,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mCameraGesturePreference;
     private SwitchPreference mCameraDoubleTapPowerGesturePreference;
     private SwitchPreference mButtonLightPreference;
+    private SwitchPreference mNavbarEnabledPreference;
 
     @Override
     protected int getMetricsCategory() {
@@ -127,6 +135,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             getPreferenceScreen().removePreference(mScreenSaverPreference);
         }
 
+        mNavbarEnabledPreference = (SwitchPreference) findPreference(KEY_NAVBAR);
+        mNavbarEnabledPreference.setOnPreferenceChangeListener(this);
 
         mButtonLightPreference = (SwitchPreference) findPreference(KEY_BUTTON_LIGHT);
         mButtonLightPreference.setOnPreferenceChangeListener(this);
@@ -430,6 +440,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         readFontSizePreference(mFontSizePref);
         updateScreenSaverSummary();
 
+        // Update doze if it is available.
+        if (mNavbarEnabledPreference != null) {
+            int value = Settings.System.getInt(getContentResolver(), NAVBAR_ENABLED, 0);
+            mNavbarEnabledPreference.setChecked(value != 0);
+        }
+
         // Update auto brightness if it is available.
         if (mButtonLightPreference != null) {
             int enabled = Settings.System.getInt(getContentResolver(),
@@ -520,6 +536,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
         if (KEY_FONT_SIZE.equals(key)) {
             writeFontSizePreference(objValue);
+        }
+        if (preference == mNavbarEnabledPreference) {
+            boolean value = (Boolean) objValue;
+            Settings.System.putInt(getContentResolver(), NAVBAR_ENABLED, value ? 1 : 0);
         }
         if (preference == mButtonLightPreference) {
             boolean enabled = (Boolean) objValue;
