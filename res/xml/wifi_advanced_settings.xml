@@ -46,6 +46,7 @@
             android:entries="@array/wifi_frequency_band_entries"
             android:entryValues="@array/wifi_frequency_band_values" />
 
+    <!-- +++ -->
     <ListPreference
             android:key="country_code"
             android:title="@string/wifi_setting_country_code_title"
@@ -53,6 +54,7 @@
             android:persistent="false"
             android:entries="@array/wifi_country_code_entries"
             android:entryValues="@array/wifi_country_code_values" />
+    <!-- === -->
 
     <Preference
             android:key="install_credentials"

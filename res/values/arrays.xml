@@ -39,6 +39,7 @@
         <item>All</item>
     </string-array>
 
+    <!-- +++ -->
     <!-- Display settings.  The display mode. These are shown in a list dialog. -->
     <string-array name="screen_colortone_entries">
         <item>Dynamic</item>
@@ -61,6 +62,7 @@
         <!-- Do not translate. -->
         <item>4</item>
     </string-array>
+    <!-- === -->
 
     <!-- Display settings.  The delay in inactivity before the screen is turned off. These are shown in a list dialog. -->
     <string-array name="screen_timeout_entries">
@@ -472,6 +474,7 @@
         <item>2</item>
     </string-array>
 
+    <!-- +++ -->
     <!-- Wi-Fi settings. Presented as a list dialog to the user to choose the Wi-Fi country code. -->
     <string-array name="wifi_country_code_entries">
         <item>Afghanistan</item>
@@ -1149,7 +1152,7 @@
         <!-- Do not translate. -->
         <item>zw</item>
     </string-array>
-
+    <!-- === -->
 
     <!-- Display options for UsageStats class -->
     <string-array name="usage_stats_display_order_types">

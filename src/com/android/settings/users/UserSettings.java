@@ -64,10 +64,10 @@ import com.android.settings.SelectableEditTextPreference;
 import com.android.settings.SettingsActivity;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
+import com.android.settings.drawable.CircleFramedDrawable;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.search.Indexable;
 import com.android.settings.search.SearchIndexableRaw;
-import com.android.settingslib.drawable.CircleFramedDrawable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1044,11 +1044,11 @@ public class UserSettings extends SettingsPreferenceFragment
             DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(
                     Context.DEVICE_POLICY_SERVICE);
             // No restricted profiles for tablets with a device owner, or phones.
-//--->
-//            if (dpm.getDeviceOwner() != null || Utils.isVoiceCapable(context)) {
-//===
-            if (dpm.getDeviceOwner() != null) {
 //+++>
+            if (dpm.getDeviceOwner() != null) {
+//===
+//            if (dpm.getDeviceOwner() != null || Utils.isVoiceCapable(context)) {
+//--->
                 caps.mCanAddRestrictedProfile = false;
             }
             final int myUserId = UserHandle.myUserId();

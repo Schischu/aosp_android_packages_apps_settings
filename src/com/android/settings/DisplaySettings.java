@@ -27,11 +27,11 @@ import static android.provider.Settings.Secure.CAMERA_GESTURE_DISABLED;
 import static android.provider.Settings.Secure.DOUBLE_TAP_TO_WAKE;
 import static android.provider.Settings.Secure.DOZE_ENABLED;
 import static android.provider.Settings.Secure.WAKE_GESTURE_ENABLED;
-
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
 
+//+++
 import static android.provider.Settings.System.BUTTON_LIGHT;
 import static android.provider.Settings.System.BUTTON_LIGHT_ON;
 import static android.provider.Settings.System.BUTTON_LIGHT_OFF;
@@ -42,6 +42,7 @@ import static android.provider.Settings.System.SCREEN_COLORTONE_AUTO;
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
 
 import static android.provider.Settings.System.NAVBAR_ENABLED;
+//===
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -76,12 +77,16 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String TAG = "DisplaySettings";
 
     /** If there is no setting in the provider, use this. */
+//+++
     private static final int FALLBACK_BUTTON_LIGHT_VALUE = android.provider.Settings.System.BUTTON_LIGHT_ON;
     private static final int FALLBACK_SCREEN_COLORTONE_VALUE = android.provider.Settings.System.SCREEN_COLORTONE_AUTO;
+//===
     private static final int FALLBACK_SCREEN_TIMEOUT_VALUE = 30000;
 
     private static final String KEY_SCREEN_TIMEOUT = "screen_timeout";
+//+++
     private static final String KEY_SCREEN_COLORTONE = "screen_colortone";
+//===
     private static final String KEY_FONT_SIZE = "font_size";
     private static final String KEY_SCREEN_SAVER = "screensaver";
     private static final String KEY_LIFT_TO_WAKE = "lift_to_wake";
@@ -93,8 +98,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_CAMERA_GESTURE = "camera_gesture";
     private static final String KEY_CAMERA_DOUBLE_TAP_POWER_GESTURE
             = "camera_double_tap_power_gesture";
+//+++
     private static final String KEY_BUTTON_LIGHT = "button_light";
     private static final String KEY_NAVBAR = "navbar_enabled";
+//===
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -102,7 +109,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private final Configuration mCurConfig = new Configuration();
 
+//+++
     private ListPreference mScreenColortonePreference;
+//===
     private ListPreference mScreenTimeoutPreference;
     private ListPreference mNightModePreference;
     private Preference mScreenSaverPreference;
@@ -112,8 +121,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mAutoBrightnessPreference;
     private SwitchPreference mCameraGesturePreference;
     private SwitchPreference mCameraDoubleTapPowerGesturePreference;
+//+++
     private SwitchPreference mButtonLightPreference;
     private SwitchPreference mNavbarEnabledPreference;
+//===
 
     @Override
     protected int getMetricsCategory() {
@@ -135,6 +146,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             getPreferenceScreen().removePreference(mScreenSaverPreference);
         }
 
+//+++
         mNavbarEnabledPreference = (SwitchPreference) findPreference(KEY_NAVBAR);
         mNavbarEnabledPreference.setOnPreferenceChangeListener(this);
 
@@ -147,6 +159,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         mScreenColortonePreference.setValue(String.valueOf(currentColortone));
         mScreenColortonePreference.setOnPreferenceChangeListener(this);
         updateColortonePreferenceDescription(currentColortone);
+//===
 
         mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);
         final long currentTimeout = Settings.System.getLong(resolver, SCREEN_OFF_TIMEOUT,
@@ -262,14 +275,16 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     }
 
     private static boolean isDozeAvailable(Context context) {
+//+++
         return true;
-        
-        //String name = Build.IS_DEBUGGABLE ? SystemProperties.get("debug.doze.component") : null;
-        //if (TextUtils.isEmpty(name)) {
-        //    name = context.getResources().getString(
-        //            com.android.internal.R.string.config_dozeComponent);
-        //}
-        //return !TextUtils.isEmpty(name);
+//===
+//        String name = Build.IS_DEBUGGABLE ? SystemProperties.get("debug.doze.component") : null;
+//        if (TextUtils.isEmpty(name)) {
+//            name = context.getResources().getString(
+//                    com.android.internal.R.string.config_dozeComponent);
+//        }
+//        return !TextUtils.isEmpty(name);
+//---
     }
 
     private static boolean isTapToWakeAvailable(Resources res) {
@@ -292,6 +307,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
     }
 
+//+++
     private void updateColortonePreferenceDescription(long currentColortone) {
         ListPreference preference = mScreenColortonePreference;
         String summary;
@@ -317,6 +333,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
         preference.setSummary(summary);
     }
+//===
 
     private void updateTimeoutPreferenceDescription(long currentTimeout) {
         ListPreference preference = mScreenTimeoutPreference;
@@ -440,6 +457,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         readFontSizePreference(mFontSizePref);
         updateScreenSaverSummary();
 
+//+++
         // Update doze if it is available.
         if (mNavbarEnabledPreference != null) {
             int value = Settings.System.getInt(getContentResolver(), NAVBAR_ENABLED, 0);
@@ -452,6 +470,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                     BUTTON_LIGHT, BUTTON_LIGHT_ON);
             mButtonLightPreference.setChecked(enabled == BUTTON_LIGHT_ON);
         }
+//===
 
         // Update auto brightness if it is available.
         if (mAutoBrightnessPreference != null) {
@@ -516,6 +535,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         final String key = preference.getKey();
+//+++
         if (KEY_SCREEN_COLORTONE.equals(key)) {
             try {
                 int value = Integer.parseInt((String) objValue);
@@ -525,6 +545,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 Log.e(TAG, "could not persist screen mode setting", e);
             }
         }
+//===
         if (KEY_SCREEN_TIMEOUT.equals(key)) {
             try {
                 int value = Integer.parseInt((String) objValue);
