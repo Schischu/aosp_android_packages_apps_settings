@@ -52,6 +52,9 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
     private static final String KEY_NOTIFY_OPEN_NETWORKS = "notify_open_networks";
     private static final String KEY_SLEEP_POLICY = "sleep_policy";
     private static final String KEY_WIFI_ASSISTANT = "wifi_assistant";
+//+++
+    private static final String KEY_COUNTRY_CODE = "country_code";
+//===
 
     private WifiManager mWifiManager;
     private NetworkScoreManager mNetworkScoreManager;
@@ -126,6 +129,19 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
             sleepPolicyPref.setValue(stringValue);
             updateSleepPolicySummary(sleepPolicyPref, stringValue);
         }
+
+//+++
+        ListPreference countryPref = (ListPreference) findPreference(KEY_COUNTRY_CODE);
+        countryPref.setOnPreferenceChangeListener(this);
+        String ccValue = mWifiManager.getCountryCode();
+        if (ccValue != null) {
+            ccValue = ccValue.toLowerCase();
+            countryPref.setValue(ccValue);
+            updateCountryCodeSummary(countryPref, ccValue);
+        } else {
+            Log.e(TAG, "Failed to fetch country code");
+        }
+//===
     }
 
     private void updateSleepPolicySummary(Preference sleepPolicyPref, String value) {
@@ -147,6 +163,17 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
         sleepPolicyPref.setSummary("");
         Log.e(TAG, "Invalid sleep policy value: " + value);
     }
+
+//+++
+    private void updateCountryCodeSummary(Preference countryCodePref, String value) {
+        if (value != null) {
+            ListPreference countryCodeListPreference = (ListPreference) countryCodePref;
+            int index = countryCodeListPreference.findIndexOfValue(value);
+            String[] summaries = getResources().getStringArray(R.array.wifi_country_code_entries);
+            countryCodeListPreference.setSummary(summaries[index]);
+        }
+    }
+//===
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
@@ -208,6 +235,18 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
             }
         }
 
+        if (KEY_COUNTRY_CODE.equals(key)) {
+            try {
+                String value = (String) newValue;
+                mWifiManager.setCountryCode(value, true);
+                updateCountryCodeSummary(preference, value);
+            } catch (NumberFormatException e) {
+                Toast.makeText(context, R.string.wifi_setting_country_code_error,
+                        Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+//===
         return true;
     }
 
