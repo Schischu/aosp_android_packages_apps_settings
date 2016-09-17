@@ -66,11 +66,13 @@ import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
+//+++
 import static android.provider.Settings.System.BUTTON_LIGHT;
 import static android.provider.Settings.System.BUTTON_LIGHT_ON;
 import static android.provider.Settings.System.BUTTON_LIGHT_OFF;
 import static android.provider.Settings.System.SCREEN_COLORTONE;
 import static android.provider.Settings.System.SCREEN_COLORTONE_AUTO;
+//===
 
 import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
@@ -79,12 +81,16 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String TAG = "DisplaySettings";
 
     /** If there is no setting in the provider, use this. */
+//+++
     private static final int FALLBACK_BUTTON_LIGHT_VALUE = android.provider.Settings.System.BUTTON_LIGHT_ON;
     private static final int FALLBACK_SCREEN_COLORTONE_VALUE = android.provider.Settings.System.SCREEN_COLORTONE_AUTO;
+//===
     private static final int FALLBACK_SCREEN_TIMEOUT_VALUE = 30000;
 
     private static final String KEY_SCREEN_TIMEOUT = "screen_timeout";
+//+++
     private static final String KEY_SCREEN_COLORTONE = "screen_colortone";
+//===
     private static final String KEY_FONT_SIZE = "font_size";
     private static final String KEY_SCREEN_SAVER = "screensaver";
     private static final String KEY_LIFT_TO_WAKE = "lift_to_wake";
@@ -98,12 +104,16 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             = "camera_double_tap_power_gesture";
     private static final String KEY_WALLPAPER = "wallpaper";
     private static final String KEY_VR_DISPLAY_PREF = "vr_display_pref";
+//+++
     private static final String KEY_BUTTON_LIGHT = "button_light";
+//===
 
     private Preference mFontSizePref;
 
     private TimeoutListPreference mScreenTimeoutPreference;
+//+++
     private ListPreference mScreenColortonePreference;
+//===
     private ListPreference mNightModePreference;
     private Preference mScreenSaverPreference;
     private SwitchPreference mLiftToWakePreference;
@@ -112,7 +122,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private SwitchPreference mAutoBrightnessPreference;
     private SwitchPreference mCameraGesturePreference;
     private SwitchPreference mCameraDoubleTapPowerGesturePreference;
+//+++
     private SwitchPreference mButtonLightPreference;
+//===
 
     @Override
     protected int getMetricsCategory() {
@@ -136,6 +148,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
         mScreenTimeoutPreference = (TimeoutListPreference) findPreference(KEY_SCREEN_TIMEOUT);
 
+//+++
         mButtonLightPreference = (SwitchPreference) findPreference(KEY_BUTTON_LIGHT);
         mButtonLightPreference.setOnPreferenceChangeListener(this);
 
@@ -145,6 +158,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         mScreenColortonePreference.setValue(String.valueOf(currentColortone));
         mScreenColortonePreference.setOnPreferenceChangeListener(this);
         updateColortonePreferenceDescription(currentColortone);
+//===
 
         mFontSizePref = findPreference(KEY_FONT_SIZE);
 
@@ -286,14 +300,16 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     }
 
     private static boolean isDozeAvailable(Context context) {
+//+++
         return true;
-        
+//===
         //String name = Build.IS_DEBUGGABLE ? SystemProperties.get("debug.doze.component") : null;
         //if (TextUtils.isEmpty(name)) {
         //    name = context.getResources().getString(
         //            com.android.internal.R.string.config_dozeComponent);
         //}
         //return !TextUtils.isEmpty(name);
+//---
     }
 
     private static boolean isTapToWakeAvailable(Resources res) {
@@ -314,7 +330,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static boolean isCameraDoubleTapPowerGestureAvailable(Resources res) {
         return res.getBoolean(
                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
+    }
 
+//+++
     private void updateColortonePreferenceDescription(long currentColortone) {
         ListPreference preference = mScreenColortonePreference;
         String summary;
@@ -340,6 +358,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
         preference.setSummary(summary);
     }
+//===
 
     private static boolean isVrDisplayModeAvailable(Context context) {
         PackageManager pm = context.getPackageManager();
@@ -401,11 +420,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         updateScreenSaverSummary();
 
         // Update auto brightness if it is available.
+//+++
         if (mButtonLightPreference != null) {
             int enabled = Settings.System.getInt(getContentResolver(),
                     BUTTON_LIGHT, BUTTON_LIGHT_ON);
             mButtonLightPreference.setChecked(enabled == BUTTON_LIGHT_ON);
         }
+//===
 
         // Update auto brightness if it is available.
         if (mAutoBrightnessPreference != null) {
@@ -468,6 +489,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
         final String key = preference.getKey();
+//+++
         if (KEY_SCREEN_COLORTONE.equals(key)) {
             try {
                 int value = Integer.parseInt((String) objValue);
@@ -477,6 +499,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 Log.e(TAG, "could not persist screen mode setting", e);
             }
         }
+//===
         if (KEY_SCREEN_TIMEOUT.equals(key)) {
             try {
                 int value = Integer.parseInt((String) objValue);
@@ -486,11 +509,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                 Log.e(TAG, "could not persist screen timeout setting", e);
             }
         }
+//+++
         if (preference == mButtonLightPreference) {
             boolean enabled = (Boolean) objValue;
             Settings.System.putInt(getContentResolver(), BUTTON_LIGHT,
                     enabled ? BUTTON_LIGHT_ON : BUTTON_LIGHT_OFF);
         }
+//===
         if (preference == mAutoBrightnessPreference) {
             boolean auto = (Boolean) objValue;
             Settings.System.putInt(getContentResolver(), SCREEN_BRIGHTNESS_MODE,
