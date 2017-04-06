@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.NetworkScoreManager;
 import android.net.NetworkScorerAppManager;
 import android.net.wifi.WifiConfiguration;
@@ -51,7 +52,9 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
     private static final String KEY_CURRENT_IP_ADDRESS = "current_ip_address";
     private static final String KEY_NOTIFY_OPEN_NETWORKS = "notify_open_networks";
     private static final String KEY_SLEEP_POLICY = "sleep_policy";
+    private static final String KEY_CELLULAR_FALLBACK = "wifi_cellular_data_fallback";
     private static final String KEY_WIFI_ASSISTANT = "wifi_assistant";
+    private static final String KEY_CONNECT_CARRIER_NETWORKS = "connect_carrier_networks";
 //+++
     private static final String KEY_COUNTRY_CODE = "country_code";
 //===
@@ -99,6 +102,17 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
             removePreference(KEY_SAVED_NETWORKS);
         }
 
+        if (!mWifiManager.hasCarrierConfiguredNetworks()){
+            removePreference(KEY_CONNECT_CARRIER_NETWORKS);
+        } else {
+            SwitchPreference connectToCarrierNetworks =
+                    (SwitchPreference) findPreference(KEY_CONNECT_CARRIER_NETWORKS);
+            if (connectToCarrierNetworks != null) {
+                connectToCarrierNetworks.setChecked(Settings.Global.getInt(getContentResolver(),
+                        Settings.Global.WIFI_CONNECT_CARRIER_NETWORKS, 0) == 1);
+            }
+        }
+
         SwitchPreference notifyOpenNetworks =
                 (SwitchPreference) findPreference(KEY_NOTIFY_OPEN_NETWORKS);
         notifyOpenNetworks.setChecked(Settings.Global.getInt(getContentResolver(),
@@ -106,6 +120,20 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
         notifyOpenNetworks.setEnabled(mWifiManager.isWifiEnabled());
 
         final Context context = getActivity();
+        if (avoidBadWifiConfig()) {
+            // Hide preference toggle, always avoid bad wifi networks.
+            removePreference(KEY_CELLULAR_FALLBACK);
+        } else {
+            // Show preference toggle, initialized based on current settings value.
+            boolean currentSetting = avoidBadWifiCurrentSettings();
+            SwitchPreference pref = (SwitchPreference) findPreference(KEY_CELLULAR_FALLBACK);
+            // TODO: can this ever be null? The return value of avoidBadWifiConfig() can only
+            // change if the resources change, but if that happens the activity will be recreated...
+            if (pref != null) {
+                pref.setChecked(currentSetting);
+            }
+        }
+
         mWifiAssistantPreference = (AppListSwitchPreference) findPreference(KEY_WIFI_ASSISTANT);
         Collection<NetworkScorerAppManager.NetworkScorerAppData> scorers =
                 NetworkScorerAppManager.getAllValidScorers(context);
@@ -164,6 +192,16 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
         Log.e(TAG, "Invalid sleep policy value: " + value);
     }
 
+    private boolean avoidBadWifiConfig() {
+        return getActivity().getResources().getInteger(
+                com.android.internal.R.integer.config_networkAvoidBadWifi) == 1;
+    }
+
+    private boolean avoidBadWifiCurrentSettings() {
+        return "1".equals(Settings.Global.getString(getContentResolver(),
+                Settings.Global.NETWORK_AVOID_BAD_WIFI));
+    }
+
 //+++
     private void updateCountryCodeSummary(Preference countryCodePref, String value) {
         if (value != null) {
@@ -182,6 +220,15 @@ public class ConfigureWifiSettings extends SettingsPreferenceFragment
         if (KEY_NOTIFY_OPEN_NETWORKS.equals(key)) {
             Settings.Global.putInt(getContentResolver(),
                     Settings.Global.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON,
+                    ((SwitchPreference) preference).isChecked() ? 1 : 0);
+        } else if (KEY_CELLULAR_FALLBACK.equals(key)) {
+            // On: avoid bad wifi. Off: prompt.
+            String settingName = Settings.Global.NETWORK_AVOID_BAD_WIFI;
+            Settings.Global.putString(getContentResolver(), settingName,
+                    ((SwitchPreference) preference).isChecked() ? "1" : null);
+        } else if (KEY_CONNECT_CARRIER_NETWORKS.equals(key)) {
+            Settings.Global.putInt(getContentResolver(),
+                    Settings.Global.WIFI_CONNECT_CARRIER_NETWORKS,
                     ((SwitchPreference) preference).isChecked() ? 1 : 0);
         } else {
             return super.onPreferenceTreeClick(preference);

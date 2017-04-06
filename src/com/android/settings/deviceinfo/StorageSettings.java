@@ -35,6 +35,7 @@ import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.os.storage.VolumeInfo;
 import android.os.storage.VolumeRecord;
+import android.support.annotation.NonNull;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.text.TextUtils;
@@ -42,6 +43,7 @@ import android.text.format.Formatter;
 import android.text.format.Formatter.BytesResult;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.android.internal.logging.MetricsProto.MetricsEvent;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
@@ -50,14 +52,16 @@ import com.android.settings.dashboard.SummaryLoader;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.search.Indexable;
 import com.android.settings.search.SearchIndexableRaw;
-
 import com.android.settingslib.RestrictedLockUtils;
+import com.android.settingslib.deviceinfo.PrivateStorageInfo;
+import com.android.settingslib.deviceinfo.StorageManagerVolumeProvider;
 import com.android.settingslib.drawer.SettingsDrawerActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
@@ -88,6 +92,7 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
     private PreferenceCategory mExternalCategory;
 
     private StorageSummaryPreference mInternalSummary;
+    private static long sTotalInternalStorage;
 
     @Override
     protected int getMetricsCategory() {
@@ -107,6 +112,10 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
 
         mStorageManager = context.getSystemService(StorageManager.class);
         mStorageManager.registerListener(mStorageListener);
+
+        if (sTotalInternalStorage <= 0) {
+            sTotalInternalStorage = mStorageManager.getPrimaryStorageSize();
+        }
 
         addPreferencesFromResource(R.xml.device_info_storage);
 
@@ -160,17 +169,19 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
 
         for (VolumeInfo vol : volumes) {
             if (vol.getType() == VolumeInfo.TYPE_PRIVATE) {
+                final long volumeTotalBytes = PrivateStorageInfo.getTotalSize(vol,
+                        sTotalInternalStorage);
                 final int color = COLOR_PRIVATE[privateCount++ % COLOR_PRIVATE.length];
                 mInternalCategory.addPreference(
-                        new StorageVolumePreference(context, vol, color));
+                        new StorageVolumePreference(context, vol, color, volumeTotalBytes));
                 if (vol.isMountedReadable()) {
                     final File path = vol.getPath();
-                    privateUsedBytes += path.getTotalSpace() - path.getFreeSpace();
-                    privateTotalBytes += path.getTotalSpace();
+                    privateUsedBytes += (volumeTotalBytes - path.getFreeSpace());
+                    privateTotalBytes += volumeTotalBytes;
                 }
             } else if (vol.getType() == VolumeInfo.TYPE_PUBLIC) {
                 mExternalCategory.addPreference(
-                        new StorageVolumePreference(context, vol, COLOR_PUBLIC));
+                        new StorageVolumePreference(context, vol, COLOR_PUBLIC, 0));
             }
         }
 
@@ -211,7 +222,6 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
                 result.value, result.units));
         mInternalSummary.setSummary(getString(R.string.storage_volume_used_total,
                 Formatter.formatFileSize(context, privateTotalBytes)));
-
         if (mInternalCategory.getPreferenceCount() > 0) {
             getPreferenceScreen().addPreference(mInternalCategory);
         }
@@ -224,6 +234,7 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
             // Only showing primary internal storage, so just shortcut
             final Bundle args = new Bundle();
             args.putString(VolumeInfo.EXTRA_VOLUME_ID, VolumeInfo.ID_PRIVATE_INTERNAL);
+            PrivateVolumeSettings.setVolumeSize(args, sTotalInternalStorage);
             Intent intent = Utils.onBuildStartFragmentIntent(getActivity(),
                     PrivateVolumeSettings.class.getName(), args, null, R.string.apps_storage, null,
                     false);
@@ -268,6 +279,8 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
             if (vol.getType() == VolumeInfo.TYPE_PRIVATE) {
                 final Bundle args = new Bundle();
                 args.putString(VolumeInfo.EXTRA_VOLUME_ID, vol.getId());
+                PrivateVolumeSettings.setVolumeSize(args, PrivateStorageInfo.getTotalSize(vol,
+                        sTotalInternalStorage));
                 startFragment(this, PrivateVolumeSettings.class.getCanonicalName(),
                         -1, 0, args);
                 return true;
@@ -399,18 +412,37 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
 
             builder.setPositiveButton(R.string.storage_menu_mount,
                     new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                /**
+                 * Check if an {@link RestrictedLockUtils#sendShowAdminSupportDetailsIntent admin
+                 * details intent} should be shown for the restriction and show it.
+                 *
+                 * @param restriction The restriction to check
+                 * @return {@code true} iff a intent was shown.
+                 */
+                private boolean wasAdminSupportIntentShown(@NonNull String restriction) {
                     EnforcedAdmin admin = RestrictedLockUtils.checkIfRestrictionEnforced(
-                            getActivity(), UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA,
-                            UserHandle.myUserId());
+                            getActivity(), restriction, UserHandle.myUserId());
                     boolean hasBaseUserRestriction = RestrictedLockUtils.hasBaseUserRestriction(
-                            getActivity(), UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA,
-                            UserHandle.myUserId());
+                            getActivity(), restriction, UserHandle.myUserId());
                     if (admin != null && !hasBaseUserRestriction) {
                         RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(), admin);
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (wasAdminSupportIntentShown(UserManager.DISALLOW_MOUNT_PHYSICAL_MEDIA)) {
                         return;
                     }
+
+                    if (vol.disk != null && vol.disk.isUsb() &&
+                            wasAdminSupportIntentShown(UserManager.DISALLOW_USB_FILE_TRANSFER)) {
+                        return;
+                    }
+
                     new MountTask(context, vol).execute();
                 }
             });
@@ -477,27 +509,16 @@ public class StorageSettings extends SettingsPreferenceFragment implements Index
 
         private void updateSummary() {
             // TODO: Register listener.
-            StorageManager storageManager = mContext.getSystemService(StorageManager.class);
-            final List<VolumeInfo> volumes = storageManager.getVolumes();
-            long privateUsedBytes = 0;
-            long privateTotalBytes = 0;
-            for (VolumeInfo info : volumes) {
-                if (info.getType() != VolumeInfo.TYPE_PUBLIC
-                        && info.getType() != VolumeInfo.TYPE_PRIVATE) {
-                    continue;
-                }
-                final File path = info.getPath();
-                if (path == null) {
-                    continue;
-                }
-                privateUsedBytes += path.getTotalSpace() - path.getFreeSpace();
-                privateTotalBytes += path.getTotalSpace();
-            }
+            final StorageManager storageManager = mContext.getSystemService(StorageManager.class);
+            PrivateStorageInfo info = PrivateStorageInfo.getPrivateStorageInfo(
+                    new StorageManagerVolumeProvider(storageManager));
+            long privateUsedBytes = info.totalBytes - info.freeBytes;
             mLoader.setSummary(this, mContext.getString(R.string.storage_summary,
                     Formatter.formatFileSize(mContext, privateUsedBytes),
-                    Formatter.formatFileSize(mContext, privateTotalBytes)));
+                    Formatter.formatFileSize(mContext, info.totalBytes)));
         }
     }
+
 
     public static final SummaryLoader.SummaryProviderFactory SUMMARY_PROVIDER_FACTORY
             = new SummaryLoader.SummaryProviderFactory() {

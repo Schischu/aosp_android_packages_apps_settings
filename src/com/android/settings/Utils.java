@@ -25,6 +25,7 @@ import android.app.AppGlobals;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -49,8 +50,6 @@ import android.net.LinkProperties;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Looper;
@@ -92,6 +91,7 @@ import android.widget.TabWidget;
 import com.android.internal.app.UnlaunchableAppActivity;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.UserIcons;
+import com.android.internal.widget.LockPatternUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,6 +102,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.content.Intent.EXTRA_USER;
+import static android.content.Intent.EXTRA_USER_ID;
 import static android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
 import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 
@@ -515,7 +516,7 @@ public final class Utils extends com.android.settingslib.Utils {
         if (resultTo == null) {
             context.startActivity(intent);
         } else {
-            resultTo.startActivityForResult(intent, resultRequestCode);
+            resultTo.getActivity().startActivityForResult(intent, resultRequestCode);
         }
     }
 
@@ -651,16 +652,21 @@ public final class Utils extends com.android.settingslib.Utils {
 
     /**
      * Returns the target user for a Settings activity.
-     *
-     * The target user can be either the current user, the user that launched this activity or
-     * the user contained as an extra in the arguments or intent extras.
-     *
+     * <p>
+     * User would be retrieved in this order:
+     * <ul>
+     * <li> If this activity is launched from other user, return that user id.
+     * <li> If this is launched from the Settings app in same user, return the user contained as an
+     *      extra in the arguments or intent extras.
+     * <li> Otherwise, return UserHandle.myUserId().
+     * </ul>
+     * <p>
      * Note: This is secure in the sense that it only returns a target user different to the current
      * one if the app launching this activity is the Settings app itself, running in the same user
      * or in one that is in the same profile group, or if the user id is provided by the system.
      */
     public static UserHandle getSecureTargetUser(IBinder activityToken,
-           UserManager um, @Nullable Bundle arguments, @Nullable Bundle intentExtras) {
+            UserManager um, @Nullable Bundle arguments, @Nullable Bundle intentExtras) {
         UserHandle currentUser = new UserHandle(UserHandle.myUserId());
         IActivityManager am = ActivityManagerNative.getDefault();
         try {
@@ -675,16 +681,14 @@ public final class Utils extends com.android.settingslib.Utils {
                     return launchedFromUser;
                 }
             }
-            UserHandle extrasUser = intentExtras != null
-                    ? (UserHandle) intentExtras.getParcelable(EXTRA_USER) : null;
+            UserHandle extrasUser = getUserHandleFromBundle(intentExtras);
             if (extrasUser != null && !extrasUser.equals(currentUser)) {
                 // Check it's secure
                 if (launchedFromSettingsApp && isProfileOf(um, extrasUser)) {
                     return extrasUser;
                 }
             }
-            UserHandle argumentsUser = arguments != null
-                    ? (UserHandle) arguments.getParcelable(EXTRA_USER) : null;
+            UserHandle argumentsUser = getUserHandleFromBundle(arguments);
             if (argumentsUser != null && !argumentsUser.equals(currentUser)) {
                 // Check it's secure
                 if (launchedFromSettingsApp && isProfileOf(um, argumentsUser)) {
@@ -696,7 +700,26 @@ public final class Utils extends com.android.settingslib.Utils {
             Log.v(TAG, "Could not talk to activity manager.", e);
         }
         return currentUser;
-   }
+    }
+
+    /**
+     * Lookup both {@link Intent#EXTRA_USER} and {@link Intent#EXTRA_USER_ID} in the bundle
+     * and return the {@link UserHandle} object. Return {@code null} if nothing is found.
+     */
+    private static @Nullable UserHandle getUserHandleFromBundle(Bundle bundle) {
+        if (bundle == null) {
+            return null;
+        }
+        final UserHandle user = bundle.getParcelable(EXTRA_USER);
+        if (user != null) {
+            return user;
+        }
+        final int userId = bundle.getInt(EXTRA_USER_ID, -1);
+        if (userId != -1) {
+            return UserHandle.of(userId);
+        }
+        return null;
+    }
 
     /**
      * Returns the target user for a Settings activity.
@@ -761,9 +784,13 @@ public final class Utils extends com.android.settingslib.Utils {
      * devices allow users to flash other OSes to them.
      */
     static void setOemUnlockEnabled(Context context, boolean enabled) {
-        PersistentDataBlockManager manager =(PersistentDataBlockManager)
-                context.getSystemService(Context.PERSISTENT_DATA_BLOCK_SERVICE);
-        manager.setOemUnlockEnabled(enabled);
+        try {
+            PersistentDataBlockManager manager = (PersistentDataBlockManager)
+                    context.getSystemService(Context.PERSISTENT_DATA_BLOCK_SERVICE);
+            manager.setOemUnlockEnabled(enabled);
+        } catch (SecurityException e) {
+            Log.e(TAG, "Fail to set oem unlock.", e);
+        }
     }
 
     /**
@@ -1125,6 +1152,30 @@ public final class Utils extends com.android.settingslib.Utils {
         return false;
     }
 
+    public static boolean unlockWorkProfileIfNecessary(Context context, int userId) {
+        try {
+            if (!ActivityManagerNative.getDefault().isUserRunning(userId,
+                    ActivityManager.FLAG_AND_LOCKED)) {
+                return false;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
+        if (!(new LockPatternUtils(context)).isSecure(userId)) {
+            return false;
+        }
+        final KeyguardManager km = (KeyguardManager) context.getSystemService(
+                Context.KEYGUARD_SERVICE);
+        final Intent unlockIntent = km.createConfirmDeviceCredentialIntent(null, null, userId);
+        if (unlockIntent != null) {
+            context.startActivity(unlockIntent);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public static CharSequence getApplicationLabel(Context context, String packageName) {
         try {
             final ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
@@ -1146,5 +1197,24 @@ public final class Utils extends com.android.settingslib.Utils {
         }
         return false;
     }
-}
 
+    public static boolean isPackageDirectBootAware(Context context, String packageName) {
+        try {
+            final ApplicationInfo ai = context.getPackageManager().getApplicationInfo(
+                    packageName, 0);
+            return ai.isDirectBootAware() || ai.isPartiallyDirectBootAware();
+        } catch (NameNotFoundException ignored) {
+        }
+        return false;
+    }
+
+    public static boolean isCarrierDemoUser(Context context) {
+        final String carrierDemoModeSetting =
+                context.getString(com.android.internal.R.string.config_carrierDemoModeSetting);
+        return UserManager.isDeviceInDemoMode(context)
+                && getUserManager(context).isDemoUser()
+                && !TextUtils.isEmpty(carrierDemoModeSetting)
+                && Settings.Secure.getInt(
+                        context.getContentResolver(), carrierDemoModeSetting, 0) == 1;
+    }
+}
